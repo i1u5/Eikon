@@ -1,7 +1,7 @@
 
 # Eikon
 
-A read-only self hostable proxy and gallery for Imgur, inspired by [Kevin](https://git.voidnet.tech/kev)'s ["imgin" project (gitea instance)](https://git.voidnet.tech/kev/imgin), but made in Deno+Eta with support for more features.
+A read-only self hostable proxy and gallery for Imgur, inspired by [Kevin](https://git.voidnet.tech/kev)'s ["imgin" project (gitea instance)](https://git.voidnet.tech/kev/imgin), but made in Deno with support for more features.
 
 
 ## License
