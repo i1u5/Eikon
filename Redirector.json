@@ -1,0 +1,58 @@
+{
+    "createdBy": "Redirector v3.5.3",
+    "createdAt": "2022-10-02T12:06:56.202Z",
+    "redirects": [
+        {
+            "description": "Imgur -> Eikon",
+            "exampleUrl": "https://imgur.com/XYZ/embedXYZ",
+            "exampleResult": "https://YOURSITEHERE/XYZ",
+            "error": null,
+            "includePattern": "https://*imgur.com/*/embed*",
+            "excludePattern": "",
+            "patternDesc": "",
+            "redirectUrl": "https://YOURSITEHERE/$2",
+            "patternType": "W",
+            "processMatches": "noProcessing",
+            "disabled": false,
+            "grouped": false,
+            "appliesTo": [
+                "main_frame",
+                "sub_frame",
+                "stylesheet",
+                "script",
+                "image",
+                "imageset",
+                "object",
+                "xmlhttprequest",
+                "history",
+                "other"
+            ]
+        },
+        {
+            "description": "Imgur -> Eikon",
+            "exampleUrl": "https://imgur.com/XYZ",
+            "exampleResult": "https://YOURSITEHERE/XYZ",
+            "error": null,
+            "includePattern": "https://*imgur.com/*",
+            "excludePattern": "",
+            "patternDesc": "",
+            "redirectUrl": "https://YOURSITEHERE/$2",
+            "patternType": "W",
+            "processMatches": "noProcessing",
+            "disabled": false,
+            "grouped": false,
+            "appliesTo": [
+                "main_frame",
+                "sub_frame",
+                "stylesheet",
+                "script",
+                "image",
+                "imageset",
+                "object",
+                "xmlhttprequest",
+                "history",
+                "other"
+            ]
+        }
+    ]
+}
