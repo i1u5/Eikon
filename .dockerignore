@@ -2,3 +2,6 @@
 LICENSE
 README.md
 .env
+.github
+.gitignore
+Redirector.json
