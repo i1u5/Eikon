@@ -7,7 +7,7 @@
         "options": {
             "useTabs": false,
             "indentWidth": 4,
-            "lineWidth": 200
+            "lineWidth": 500
         }
     }
 }
