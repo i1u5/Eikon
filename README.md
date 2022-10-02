@@ -8,7 +8,7 @@ A cloudflare worker is required if you wish to proxy, but worry not, it already 
 
 ## Goals
 
-- The most ideal use case (which this was made for) is [Redirector](https://github.com/einaregilsson/Redirector), an extension that redirects links before they load, that way only a change of domain would be required without modifying the rest of the URL,
+- The most ideal use case (which this was made for) is [Redirector](https://github.com/einaregilsson/Redirector) ([example config file](https://github.com/i1u5/Eikon/blob/main/Redirector.json)), an extension that redirects links before they load, that way only a change of domain would be required without modifying the rest of the URL,
 
 - Inline Frame support,
 
