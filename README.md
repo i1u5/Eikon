@@ -4,7 +4,7 @@
 
 A read-only self hostable & bloatless gallery for Imgur, inspired by [Kevin](https://git.voidnet.tech/kev)'s [imgin project](https://git.voidnet.tech/kev/imgin), but made in Deno with support for better performance and more features.
 
-A cloudflare worker is required if you wish to proxy, but worry not, it already [exists](https://github.com/i1u5/wrangler-cdn) (you can also use the public one there, but it might be slow or quickly reach quota).
+A cloudflare worker is required if you wish to proxy, but worry not, it already [exists](https://github.com/i1u5/wrangler-cdn) (you can also use the public one there "cdn.medzik.xyz", but it might be slow or quickly reach quota).
 
 ## Goals
 
@@ -25,7 +25,6 @@ A cloudflare worker is required if you wish to proxy, but worry not, it already 
 - Caching images or restoring already deleted ones for doxxing purposes (images won't show up after they are deleted from Imgur, the only caching method used here is CloudFlare and it refreshes quickly).
 
 ## Usage
-[Create a CF worker](https://github.com/i1u5/wrangler-cdn), edit **config.ts** with its URL (without "https" or trailing slash) and run:
 ```
 deno run --allow-net --allow-env ./main.ts
 ```
