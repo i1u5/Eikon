@@ -1,6 +1,6 @@
 const constants = {
     // CDN url !!without a trailing slash!! from >> https://github.com/i1u5/wrangler-cdn
-    cdn: "WORKERNAME.USERNAME.workers.dev",
+    cdn: "cdn.medzik.xyz",
     // User agent for the requests, the default does the job
     reqUA: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36",
     // Cookie to be used for requests, set it to 0 if you don't want to process NSFW galleries
