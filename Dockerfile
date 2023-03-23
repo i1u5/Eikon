@@ -1,29 +1,18 @@
-# Based on https://github.com/denoland/deno_docker/blob/main/alpine.dockerfile
+FROM denoland/deno:1.32.1
 
-ARG DENO_VERSION=1.25.4
-ARG BIN_IMAGE=denoland/deno:bin-${DENO_VERSION}
-FROM ${BIN_IMAGE} AS bin
+# The port that your application listens to.
+EXPOSE 8080
 
-FROM frolvlad/alpine-glibc:alpine-3.13
+WORKDIR /app
 
-RUN apk --no-cache add ca-certificates
+# Cache the dependencies as a layer (the following two steps are re-run only when deps.ts is modified).
+# Ideally cache deps.ts will download and compile _all_ external files used in main.ts.
+COPY deps.ts .
+RUN deno cache deps.ts
 
-RUN addgroup --gid 1000 deno \
-  && adduser --uid 1000 --disabled-password deno --ingroup deno \
-  && mkdir /deno-dir/ \
-  && chown deno:deno /deno-dir/
-
-ENV DENO_DIR /deno-dir/
-ENV DENO_INSTALL_ROOT /usr/local
-
-ARG DENO_VERSION
-ENV DENO_VERSION=${DENO_VERSION}
-COPY --from=bin /deno /bin/deno
-
-WORKDIR /deno-dir
+# These steps will be re-run upon each file change in your working directory:
 COPY . .
-
-ENTRYPOINT ["/bin/deno"]
-CMD ["run", "--allow-net", "https://deno.land/std/examples/echo_server.ts"]
-
+# Compile the main app so that it doesn't need to be compiled each startup/entry.
 RUN deno cache main.ts
+
+CMD ["run", "-A", "main.ts"]
