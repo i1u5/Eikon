@@ -1,6 +1,6 @@
 // deno run --config ./deno.json --allow-net --allow-env ./main.ts
-import { Application, Router, RouterContext } from "https://deno.land/x/oak@v11.1.0/mod.ts";
-import { DOMParser, Element } from "https://deno.land/x/deno_dom@v0.1.35-alpha/deno-dom-wasm.ts";
+import { Application, Router, RouterContext } from "https://deno.land/x/oak@v12.1.0/mod.ts";
+import { DOMParser, Element } from "https://deno.land/x/deno_dom@v0.1.36-alpha/deno-dom-wasm.ts";
 import { postDataJSON } from "./static.ts";
 import { unescape as getSafeStrLiteral } from "https://deno.land/x/safe_string_literal@v1.0.4/index.js";
 import constants from "./config.ts";
@@ -9,6 +9,7 @@ if (!constants.cdn || constants.cdn.startsWith("http") || constants.cdn.endsWith
     console.log("Warning: CF Worker not properly set, expect issues with the code");
 }
 
+const reqOpts = { headers: { "User-Agent": constants.reqUA, "Cookie": constants.reqCookie } };
 const router = new Router();
 
 const galleryHandler = async (
@@ -18,7 +19,6 @@ const galleryHandler = async (
         | RouterContext<"/t/:tag/:id">,
 ) => {
     const files = [];
-    const reqOpts = { headers: { "User-Agent": constants.reqUA, "Cookie": constants.reqCookie } };
 
     // postData method is only usable in a new gallery/album.
     // blogLayout method is the opposite and mostly found in old ones.
@@ -146,8 +146,19 @@ router
     .get("/t/:tag/:id", async (ctx) => await galleryHandler(ctx))
     .get("/gallery/:id", async (ctx) => await galleryHandler(ctx))
     .get("/a/:id", async (ctx) => await galleryHandler(ctx))
-    //TODO: handle direct requests
-    .get("/:id", (ctx) => ctx.response.redirect(`https://${constants.cdn}/${ctx.params.id}`));
+    .get("/:id", async (ctx) => {
+        if(!ctx.params.id.includes(".")) {
+            for (const ext of [".mp4", ".jpg"]) {
+                const endreq = await fetch(`https://i.imgur.com/${ctx.params.id + ext}`, reqOpts);
+
+                if (endreq.ok) {
+                    return ctx.response.redirect(`https://${constants.cdn}/${ctx.params.id + ext}`);
+                }
+            }
+
+            return ctx.response.body = "Not Found.";
+        } else return ctx.response.redirect(`https://${constants.cdn}/${ctx.params.id}`);
+    });
 
 const app = new Application();
 app.use(router.routes());
