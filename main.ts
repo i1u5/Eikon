@@ -1,8 +1,8 @@
 // deno run --config ./deno.json --allow-net --allow-env ./main.ts
-import { Application, Router, RouterContext } from "https://deno.land/x/oak@v12.6.0/mod.ts";
-import { DOMParser, Element } from "https://deno.land/x/deno_dom@v0.1.38/deno-dom-wasm.ts";
+import { Application, Router, RouterContext } from "https://deno.land/x/oak@v12.1.0/mod.ts";
+import { DOMParser, Element } from "https://deno.land/x/deno_dom@v0.1.36-alpha/deno-dom-wasm.ts";
 import { postDataJSON } from "./static.ts";
-import { unescape as getSafeStrLiteral } from "https://deno.land/x/safe_string_literal@v1.0.5/index.js";
+import { unescape as getSafeStrLiteral } from "https://deno.land/x/safe_string_literal@v1.0.4/index.js";
 import constants from "./config.ts";
 
 if (!constants.cdn || constants.cdn.startsWith("http") || constants.cdn.endsWith("/") || (await fetch(`https://${constants.cdn}`)).status !== 406) {
@@ -177,5 +177,7 @@ router
 const app = new Application();
 app.use(router.routes());
 app.use(router.allowedMethods());
+
+console.log("Listening.");
 
 await app.listen({ port: Deno.env.get("PORT") ? parseInt(Deno.env.get("PORT")!, 10) : 8080 });
