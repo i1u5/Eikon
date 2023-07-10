@@ -1,8 +1,8 @@
 // deno run --config ./deno.json --allow-net --allow-env ./main.ts
-import { Application, Router, RouterContext } from "https://deno.land/x/oak@v12.1.0/mod.ts";
-import { DOMParser, Element } from "https://deno.land/x/deno_dom@v0.1.36-alpha/deno-dom-wasm.ts";
+import { Application, Router, RouterContext } from "https://deno.land/x/oak@v12.6.0/mod.ts";
+import { DOMParser, Element } from "https://deno.land/x/deno_dom@v0.1.38/deno-dom-wasm.ts";
 import { postDataJSON } from "./static.ts";
-import { unescape as getSafeStrLiteral } from "https://deno.land/x/safe_string_literal@v1.0.4/index.js";
+import { unescape as getSafeStrLiteral } from "https://deno.land/x/safe_string_literal@v1.0.5/index.js";
 import constants from "./config.ts";
 
 if (!constants.cdn || constants.cdn.startsWith("http") || constants.cdn.endsWith("/") || (await fetch(`https://${constants.cdn}`)).status !== 406) {
@@ -147,17 +147,31 @@ router
     .get("/gallery/:id", async (ctx) => await galleryHandler(ctx))
     .get("/a/:id", async (ctx) => await galleryHandler(ctx))
     .get("/:id", async (ctx) => {
-        if(!ctx.params.id.includes(".")) {
-            for (const ext of [".mp4", ".jpg"]) {
-                const endreq = await fetch(`https://i.imgur.com/${ctx.params.id + ext}`, reqOpts);
+        let ID = ctx.params.id;
 
-                if (endreq.ok) {
-                    return ctx.response.redirect(`https://${constants.cdn}/${ctx.params.id + ext}`);
-                }
+        for (const ext of [".mp4", ".png", ".jpg"]) {
+            if (ID.includes(".")) {
+                ID = ID.split(".")[0];
             }
 
-            return ctx.response.body = "Not Found.";
-        } else return ctx.response.redirect(`https://${constants.cdn}/${ctx.params.id}`);
+            const endreq = await fetch(`https://i.imgur.com/${ID + ext}`, reqOpts);
+
+            if (endreq.ok) {
+                const file = `https://${constants.cdn}/${ID + ext}`;
+
+                switch (ext) {
+                    case ".mp4":
+                        return ctx.response.body = constants.siteMarkdown.header + `<video onloadstart="this.volume=0.3" muted autoplay loop playsinline controls preload="none" poster="${file.replace(".mp4", ".jpg")}"><source src="${file}" type="video/mp4"></video>` + constants.siteMarkdown.footer;
+                    case ".png":
+                    case ".jpg":
+                        return ctx.response.body = constants.siteMarkdown.header + `<a href="${file}" target="_blank"><img src="${file}" loading="lazy"></a>` + constants.siteMarkdown.footer;
+                }
+
+                break;
+            }
+        }
+
+        return ctx.response.body = "Not Found.";
     });
 
 const app = new Application();
